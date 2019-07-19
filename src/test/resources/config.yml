@@ -1,0 +1,16 @@
+twitterConsumerKey: ***REMOVED***
+twitterConsumerSecret: ***REMOVED***
+
+database:
+  driverClass: org.sqlite.JDBC
+  url: jdbc:sqlite:no-name.db
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: "/* Homework Health Check */ SELECT 1"
+  validationQueryTimeout: 3s
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: false
+  evictionInterval: 10s
+  minIdleTime: 1 minute
