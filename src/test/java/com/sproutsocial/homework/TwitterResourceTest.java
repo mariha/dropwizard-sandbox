@@ -1,41 +1,41 @@
 package com.no-namesocial.homework;
 
 import io.dropwizard.testing.ResourceHelpers;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.dropwizard.testing.junit5.DropwizardAppExtension;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.HttpClientConfig.httpClientConfig;
 
-public class TwitterResourceTest {
+@ExtendWith(DropwizardExtensionsSupport.class)
+class TwitterResourceTest {
 
-    @ClassRule
-    public static final DropwizardAppRule<HomeworkConfiguration> dropwizardApp =
-            new DropwizardAppRule<>(HomeworkApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
+    private static final DropwizardAppExtension<HomeworkConfiguration> dropwizardApp =
+            new DropwizardAppExtension<>(HomeworkApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
 
-    @BeforeClass
-    public static void initEndpoint() {
+    @BeforeAll
+    static void initEndpoint() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = dropwizardApp.getLocalPort();
         RestAssured.basePath = "/v1";
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.config = RestAssured.config().httpClient(httpClientConfig().reuseHttpClientInstance());
     }
 
     @Test
-    public void showTimeline() {
+    void showTimeline() {
 
         given()
             .pathParam("user-id", 123)
@@ -47,7 +47,7 @@ public class TwitterResourceTest {
     }
 
     @Test
-    public void tweetMessage() {
+    void tweetMessage() {
         given()
             .pathParam("user-id", 123)
             .param("message", "Hello, world!").
@@ -58,7 +58,7 @@ public class TwitterResourceTest {
     }
 
     @Test
-    public void tryToUpdateTweets() {
+    void tryToUpdateTweets() {
         given()
             .pathParam("user-id", 123)
             .param("message", "Hello, world!")
@@ -69,7 +69,7 @@ public class TwitterResourceTest {
     }
 
     @Test
-    public void tryToDeleteTweets() {
+    void tryToDeleteTweets() {
         given()
             .pathParam("user-id", 123)
         .when()
