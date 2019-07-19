@@ -25,6 +25,7 @@ public class TwitterResourceTest {
     public static void initEndpoint() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = dropwizardApp.getLocalPort();
+        RestAssured.basePath = "/v1";
     }
 
     @Before
@@ -37,10 +38,10 @@ public class TwitterResourceTest {
     public void showTimeline() {
 
         given()
-            .param("twitter_account.id", 123).
-        when()
-            .get("twitter/timeline").
-        then()
+            .pathParam("user-id", 123)
+        .when()
+            .get("/twitter/{user-id}/tweets")
+        .then()
             .statusCode(Response.Status.OK.getStatusCode())
             .contentType(ContentType.JSON);
     }
@@ -48,11 +49,32 @@ public class TwitterResourceTest {
     @Test
     public void tweetMessage() {
         given()
-            .param("twitter_account.id", 123)
+            .pathParam("user-id", 123)
             .param("message", "Hello, world!").
         when()
-            .post("twitter/tweet").
-        then()
+            .post("/twitter/{user-id}/tweets")
+        .then()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    public void tryToUpdateTweets() {
+        given()
+            .pathParam("user-id", 123)
+            .param("message", "Hello, world!")
+        .when()
+            .put("/twitter/{user-id}/tweets")
+        .then()
+            .statusCode(Response.Status.METHOD_NOT_ALLOWED.getStatusCode());
+    }
+
+    @Test
+    public void tryToDeleteTweets() {
+        given()
+            .pathParam("user-id", 123)
+        .when()
+            .delete("/twitter/{user-id}/tweets")
+        .then()
+            .statusCode(Response.Status.METHOD_NOT_ALLOWED.getStatusCode());
     }
 }

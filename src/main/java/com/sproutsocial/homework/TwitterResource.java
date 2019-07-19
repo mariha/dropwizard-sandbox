@@ -5,12 +5,13 @@ import org.apache.http.client.HttpClient;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/twitter")
+@Path("/v1/twitter")
 public class TwitterResource {
 
     public TwitterResource(HttpClient client) {
@@ -27,9 +28,9 @@ public class TwitterResource {
     - Render the result as a JSON response
      */
     @GET
-    @Path("timeline")
+    @Path("{user-id}/tweets")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response fetchTimeline(@QueryParam("twitter_account.id") String twitterId) {
+    public Response fetchTimeline(@PathParam("user-id") String userId) {
         return Response.ok("", MediaType.APPLICATION_JSON).build();
     }
 
@@ -41,8 +42,8 @@ public class TwitterResource {
     - Use the credentials associated with the twitter account to send that text as a tweet using Twitter's API
      */
     @POST
-    @Path("tweet")
-    public Response postMessage(@QueryParam("twitter_account.id") String twitterId, @QueryParam("message") String message) {
+    @Path("{user-id}/tweets")
+    public Response postMessage(@PathParam("user-id") String userId, @QueryParam("message") String message) {
         return Response.noContent().build();
     }
 }
