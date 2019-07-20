@@ -1,21 +1,24 @@
 package com.no-namesocial.homework;
 
-import org.apache.http.client.HttpClient;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/v1/twitter")
 public class TwitterResource {
 
-    public TwitterResource(HttpClient client) {
+    private final Client client;
+
+    public TwitterResource(HomeworkConfiguration configuration, Client client) {
         // todo implement
+        this.client = client;
     }
 
     /*
@@ -30,7 +33,7 @@ public class TwitterResource {
     @GET
     @Path("{user-id}/tweets")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response fetchTimeline(@PathParam("user-id") String userId) {
+    public Response fetchTimeline(@PathParam("user-id") long userId) {
         return Response.ok("", MediaType.APPLICATION_JSON).build();
     }
 
