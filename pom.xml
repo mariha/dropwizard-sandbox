@@ -16,6 +16,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <dropwizard.version>1.3.12</dropwizard.version>
         <mainClass>com.no-namesocial.homework.HomeworkApplication</mainClass>
     </properties>
@@ -29,6 +31,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <!-- overwrite dropwizard version 1.3 -->
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>2.1</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -36,12 +45,10 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
-            <version>${dropwizard.version}</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-jdbi</artifactId>
-            <version>${dropwizard.version}</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>
@@ -50,7 +57,6 @@
         <dependency>
             <groupId>org.glassfish.jersey.security</groupId>
             <artifactId>oauth1-client</artifactId>
-            <version>2.29</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
@@ -70,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <version>5.5.0</version>
             <scope>test</scope>
         </dependency>
@@ -80,18 +86,16 @@
             <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>3.0.0-M2</version>
                 <configuration>
@@ -99,6 +103,16 @@
                         <requireMavenVersion>
                             <version>3.0.0</version>
                         </requireMavenVersion>
+
+                        <!-- Ensure JRE 1.8.x -->
+                        <requireJavaVersion>
+                            <version>1.8</version>
+                            <message>Higher java version numbers are not parsed correctly by Hibernate Validator
+                                (Java Bean Validation API implementation used by Dropwizard)</message>
+                        </requireJavaVersion>
+
+                        <!-- Ensures that every transitive dependency is resolved to its specified version or higher -->
+                        <requireUpperBoundDeps/>
                     </rules>
                 </configuration>
                 <executions>
@@ -144,6 +158,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
@@ -156,14 +171,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.4</version>
@@ -176,6 +184,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
@@ -187,6 +196,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <!-- Diagnostics only. Useful goals:
+                    mvn dependency:tree
+                    mvn dependency:analyze-only
+                    mvn dependency:analyze-dep-mgt -Dmdep.analyze.ignore.direct=false
+                -->
             </plugin>
         </plugins>
     </build>
