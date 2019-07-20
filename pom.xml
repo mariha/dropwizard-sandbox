@@ -76,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <version>5.5.0</version>
             <scope>test</scope>
         </dependency>
@@ -93,9 +93,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
-                <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -204,7 +201,7 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.1.1</version>
-                <!-- Diagnostics only. Useful goals:
+                <!-- Diagnostics only tools. Useful goals:
                     mvn dependency:tree
                     mvn dependency:analyze-only
                     mvn dependency:analyze-dep-mgt -Dmdep.analyze.ignore.direct=false
