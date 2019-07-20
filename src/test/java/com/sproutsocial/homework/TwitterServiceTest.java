@@ -16,7 +16,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.config.HttpClientConfig.httpClientConfig;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-class TwitterResourceTest {
+class TwitterServiceTest {
 
     private static final DropwizardAppExtension<HomeworkConfiguration> dropwizardApp =
             new DropwizardAppExtension<>(HomeworkApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
