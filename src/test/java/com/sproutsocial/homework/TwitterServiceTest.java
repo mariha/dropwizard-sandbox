@@ -25,7 +25,7 @@ class TwitterServiceTest {
     static void initEndpoint() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = dropwizardApp.getLocalPort();
-        RestAssured.basePath = "/v1";
+        RestAssured.basePath = "/api/v1";
     }
 
     @BeforeEach

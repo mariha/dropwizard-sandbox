@@ -1,6 +1,9 @@
 twitterConsumerKey: ***REMOVED***
 twitterConsumerSecret: ***REMOVED***
 
+server:
+  rootPath: /api/
+
 database:
   driverClass: org.sqlite.JDBC
   url: jdbc:sqlite:no-name.db
