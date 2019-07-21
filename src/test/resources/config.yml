@@ -3,6 +3,14 @@ twitterConsumerSecret: ***REMOVED***
 
 server:
   rootPath: /api/
+  requestLog:
+    appenders:
+      - type: console
+      # Rolled over daily and retained for 5 days.
+      - type: file
+        currentLogFilename: ./logs/requests.log
+        archivedLogFilenamePattern: ./logs/requests-%d.log.gz
+        archivedFileCount: 5
 
 # defaults: https://www.dropwizard.io/1.3.12/docs/manual/configuration.html#jerseyclient
 jerseyClient:
@@ -22,3 +30,33 @@ database:
   checkConnectionWhileIdle: false
   evictionInterval: 10s
   minIdleTime: 1 minute
+
+logging:
+  # Permit DEBUG, INFO, WARN and ERROR messages to be logged by appenders.
+  level: DEBUG
+
+  appenders:
+    # Log warnings and errors to stderr
+    - type: console
+      threshold: WARN
+      target: stderr
+
+    - type: console
+      threshold: INFO
+      target: stdout
+
+    # Log info, warnings and errors to our apps' main log.
+    # Rolled over daily and retained for 5 days.
+    - type: file
+      threshold: INFO
+      currentLogFilename: ./logs/app.log
+      archivedLogFilenamePattern: ./logs/app-%d.log.gz
+      archivedFileCount: 5
+
+    # Log debug messages, info, warnings and errors to our apps' debug log.
+    # Rolled over hourly and retained for 6 hours
+    - type: file
+      threshold: DEBUG
+      currentLogFilename: ./logs/debug.log
+      archivedLogFilenamePattern: ./logs/debug-%d{yyyy-MM-dd-HH}.log.gz
+      archivedFileCount: 6
