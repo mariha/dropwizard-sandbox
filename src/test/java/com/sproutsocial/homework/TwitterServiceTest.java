@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.HttpClientConfig.httpClientConfig;
 
-@Tag("end-to-end")
 @ExtendWith(DropwizardExtensionsSupport.class)
 class TwitterServiceTest {
 
@@ -36,7 +35,7 @@ class TwitterServiceTest {
         RestAssured.config = RestAssured.config().httpClient(httpClientConfig().reuseHttpClientInstance());
     }
 
-    @Test
+    @SmokeTest
     void showTimeline() {
 
         given()
@@ -48,7 +47,7 @@ class TwitterServiceTest {
             .contentType(ContentType.JSON);
     }
 
-    @Test
+    @SmokeTest
     void tweetMessage() {
         given()
             .pathParam("user-id", 123)
