@@ -33,13 +33,15 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
 
+        final Client client = new JerseyClientBuilder(environment)
+                .using(configuration.getJerseyClientConfiguration())
+                .build(getName());
+        client.register(JacksonFeature.class);
+
         final ConsumerCredentials appCredentials = new ConsumerCredentials(
                 configuration.getTwitterConsumerKey(), configuration.getTwitterConsumerSecret());
-        final Feature filterFeature = OAuth1ClientSupport.builder(appCredentials).feature().build();
-
-        final Client client = new JerseyClientBuilder(environment).build(getName());
-        client.register(filterFeature);
-        client.register(JacksonFeature.class);
+        final Feature oauthFeature = OAuth1ClientSupport.builder(appCredentials).feature().build();
+        client.register(oauthFeature);
 
         environment.jersey().register(new TwitterResource(configuration, client));
         environment.healthChecks().register("twitter", new TwitterHealthCheck(configuration, client));
