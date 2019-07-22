@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -30,18 +29,23 @@ class TwitterResourceTest {
     public static class TwitterTimelineStub {
         @GET
         @Produces(MediaType.APPLICATION_JSON)
-        public List<Tweet> homeTimeline() {
+        public List<ServiceTweetDTO> homeTimeline() {
             return Collections.emptyList();
         }
     }
 
-    // dropwizard extentions
-    // Junit extensions engine can not be used directly because of dependencies between them and order of construction/initialization: remoteEndpoints needs to be fully initialized before resources are constructed with baseUri and random port used in resources.
+    /*
+     * dropwizard extensions for unit testing
+     * <p/>
+     * 'resources' constructor depends on 'remoteEndpoint' construction and initialization done by #before() method.
+     * JUnit engine instrumented with @ExtendWith(DropwizardExtensionsSupport.class) creates both of them first and then calls before()
+     * methods. Because of this, we manage lifecycle by ourselves in @BeforeAll and @AfterAll methods.
+     */
     private static DropwizardClientExtension remoteEndpoints;
     private static ResourceExtension resources;
 
     @BeforeAll
-    static void setup() throws Throwable {
+    static void initExtensions() throws Throwable {
         remoteEndpoints = new DropwizardClientExtension(new TwitterTimelineStub());
         remoteEndpoints.before();
 
@@ -52,7 +56,7 @@ class TwitterResourceTest {
     }
 
     @AfterAll
-    static void tearDown() throws Throwable {
+    static void deinitializeExtensions() throws Throwable {
         remoteEndpoints.after();
         resources.after();
     }

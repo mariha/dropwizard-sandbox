@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Entity into which twitter message is deserialized.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Tweet {
+public class ServiceTweetDTO {
     // todo validation?
 
     @JsonProperty("created_at")
@@ -19,11 +19,11 @@ public class Tweet {
     @JsonProperty(value = "user", required = true)
     private User user;
 
-    public Tweet() {
+    public ServiceTweetDTO() {
         // for jackson deserializer
     }
 
-    public Tweet(String createdAt, String text, User user) {
+    public ServiceTweetDTO(String createdAt, String text, User user) {
         this.createdAt = createdAt;
         this.text = text;
         this.user = user;

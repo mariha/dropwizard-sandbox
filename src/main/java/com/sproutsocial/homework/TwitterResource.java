@@ -60,10 +60,10 @@ public class TwitterResource {
                     + ", entity: " + errorEntity);
         }
 
-        final List<Tweet> tweets = response.readEntity(new GenericType<List<Tweet>>() {});
+        final List<ServiceTweetDTO> tweets = response.readEntity(new GenericType<List<ServiceTweetDTO>>() {});
         // todo translate twitter response to our response
         System.out.println("Tweets:\n");
-        for (final Tweet tweet : tweets) {
+        for (final ServiceTweetDTO tweet : tweets) {
             System.out.println(tweet.getText());
             System.out.println("[posted by " + tweet.getUser().getName() + " at " + tweet.getCreatedAt() + "]");
         }
