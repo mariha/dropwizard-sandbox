@@ -26,10 +26,10 @@ public class TwitterResource {
     private final String twitterHomeTimelineEndpoint;
     private final AccessTokenService accessTokenService;
 
-    public TwitterResource(String uri, Client client, AccessTokenService accessTokenService) {
+    public TwitterResource(Client client, TwitterEndpoints endpoints, AccessTokenService accessTokenService) {
         this.client = client;
         this.accessTokenService = accessTokenService;
-        this.twitterHomeTimelineEndpoint = uri + "/statuses/home_timeline.json";
+        this.twitterHomeTimelineEndpoint = endpoints.getTimelineEndpoint();
     }
 
     /*

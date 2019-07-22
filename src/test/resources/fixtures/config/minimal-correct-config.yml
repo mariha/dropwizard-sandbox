@@ -1,0 +1,14 @@
+twitterConsumerKey: x
+twitterConsumerSecret: y
+
+twitterEndpoints:
+  rootUri: https://api.twitter.com/1.1/
+  timelineEndpoint: statuses/home_timeline.json
+  updateEndpoint: statuses/update.json
+
+server:
+  rootPath: /api/
+
+database:
+  driverClass: org.sqlite.JDBC
+  url: jdbc:sqlite:no-name.db

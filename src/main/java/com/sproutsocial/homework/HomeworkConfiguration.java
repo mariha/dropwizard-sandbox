@@ -10,59 +10,63 @@ import javax.validation.constraints.NotNull;
 
 public class HomeworkConfiguration extends Configuration {
 
-    @Valid
     @NotNull
     private String twitterConsumerKey;
 
-    @Valid
     @NotNull
     private String twitterConsumerSecret;
 
-    @Valid
     @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
+    private @Valid TwitterEndpoints twitterEndpoints = new TwitterEndpoints();
 
-    @Valid
     @NotNull
-    private JerseyClientConfiguration jerseyClient = new JerseyClientConfiguration();
+    private @Valid DataSourceFactory database = new DataSourceFactory();
 
-    @JsonProperty("twitterConsumerKey")
+    @NotNull
+    private @Valid JerseyClientConfiguration jerseyClient = new JerseyClientConfiguration();
+
     public String getTwitterConsumerKey() {
         return twitterConsumerKey;
     }
 
-    @JsonProperty("twitterConsumerKey")
-    public void setTwitterConsumerKey(String twitterConsumerKey) {
+    @JsonProperty
+    private void setTwitterConsumerKey(String twitterConsumerKey) {
         this.twitterConsumerKey = twitterConsumerKey;
     }
 
-    @JsonProperty("twitterConsumerSecret")
     public String getTwitterConsumerSecret() {
         return twitterConsumerSecret;
     }
 
-    @JsonProperty("twitterConsumerSecret")
+    @JsonProperty
     public void setTwitterConsumerSecret(String twitterConsumerSecret) {
         this.twitterConsumerSecret = twitterConsumerSecret;
     }
 
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory factory) {
-        this.database = factory;
-    }
-
-    @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }
 
-    @JsonProperty("jerseyClient")
+    @JsonProperty("database")
+    private void setDataSourceFactory(DataSourceFactory factory) {
+        this.database = factory;
+    }
+
     public JerseyClientConfiguration getJerseyClientConfiguration() {
         return jerseyClient;
     }
 
     @JsonProperty("jerseyClient")
-    public void setJerseyClientConfiguration(JerseyClientConfiguration jerseyClient) {
+    private void setJerseyClientConfiguration(JerseyClientConfiguration jerseyClient) {
         this.jerseyClient = jerseyClient;
+    }
+
+    public TwitterEndpoints getTwitterEndpoints() {
+        return twitterEndpoints;
+    }
+
+    @JsonProperty
+    private void setTwitterEndpoints(TwitterEndpoints twitterEndpoints) {
+        this.twitterEndpoints = twitterEndpoints;
     }
 }

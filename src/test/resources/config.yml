@@ -1,6 +1,11 @@
 twitterConsumerKey: ***REMOVED***
 twitterConsumerSecret: ***REMOVED***
 
+twitterEndpoints:
+  rootUri: https://api.twitter.com/1.1/
+  timelineEndpoint: statuses/home_timeline.json
+  updateEndpoint: statuses/update.json
+
 server:
   rootPath: /api/
   requestLog:

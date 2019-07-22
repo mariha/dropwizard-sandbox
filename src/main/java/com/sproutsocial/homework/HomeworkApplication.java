@@ -46,7 +46,7 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
         final Feature oauthFeature = OAuth1ClientSupport.builder(appCredentials).feature().build();
         client.register(oauthFeature);
 
-        environment.jersey().register(new TwitterResource("https://api.twitter.com/1.1", client, new AccessTokenService(jdbi)));
+        environment.jersey().register(new TwitterResource(client, configuration.getTwitterEndpoints(), new AccessTokenService(jdbi)));
         environment.healthChecks().register("twitter", new TwitterHealthCheck(configuration, client));
     }
 }

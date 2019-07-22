@@ -59,8 +59,13 @@ class TwitterResourceTest {
         remoteEndpoints = new DropwizardClientExtension(new TwitterTimelineStub());
         remoteEndpoints.before();
 
+        TwitterEndpoints endpoints = new TwitterEndpoints(
+                remoteEndpoints.baseUri().toString(),
+                "/statuses/home_timeline.json",
+                "/statuses/update.json"
+        );
         resources = new ResourceExtension.Builder()
-                .addResource(new TwitterResource(remoteEndpoints.baseUri().toString(), ClientBuilder.newClient(), accessTokenService))
+                .addResource(new TwitterResource(ClientBuilder.newClient(), endpoints, accessTokenService))
                 .build();
         resources.before();
     }
