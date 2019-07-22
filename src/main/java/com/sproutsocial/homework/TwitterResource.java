@@ -9,12 +9,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 @Path("/v1/twitter")
@@ -22,14 +24,11 @@ public class TwitterResource {
 
     private final Client client;
     private final String twitterHomeTimelineEndpoint;
+    private final AccessTokenService accessTokenService;
 
-    public TwitterResource(HomeworkConfiguration configuration, Client client) {
+    public TwitterResource(String uri, Client client, AccessTokenService accessTokenService) {
         this.client = client;
-        this.twitterHomeTimelineEndpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json";
-    }
-
-    public TwitterResource(String uri, Client client) {
-        this.client = client;
+        this.accessTokenService = accessTokenService;
         this.twitterHomeTimelineEndpoint = uri + "/statuses/home_timeline.json";
     }
 
@@ -46,16 +45,13 @@ public class TwitterResource {
     @Path("{user-id}/tweets")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchTimeline(@PathParam("user-id") long userId) {
-        // todo from db
-        String oauthToken = "946723726867030016-d7WcwvbRmJHmzRt2qVUcMktrlAfwez4";
-        String oauthTokenSecret = "kIJThIl0YRI1N4vgIcPtpQpt8UTgRgejkQPzndLOwIk8y";
-        AccessToken accessToken = new AccessToken(oauthToken, oauthTokenSecret);
+        final AccessToken accessToken = accessTokenService.getByTwitterId(userId)
+                .orElseThrow(() -> new WebApplicationException(String.format("No access token for user %d", userId), Status.NOT_FOUND));
 
         final Response response = request(twitterHomeTimelineEndpoint, accessToken).get();
         if (response.getStatus() != 200) {
             String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
-            // todo return http response to user and log
-            throw new RuntimeException("Request to Twitter was not successful. Response code: "
+            throw new WebApplicationException("Request to Twitter was not successful. Response code: "
                     + response.getStatus() + ", reason: " + response.getStatusInfo().getReasonPhrase()
                     + ", entity: " + errorEntity);
         }
