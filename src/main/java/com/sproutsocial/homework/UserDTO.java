@@ -11,7 +11,7 @@ import java.util.Objects;
  * Entity into which twitter user is deserialized.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class UserDTO {
 
     @NotEmpty
     private long id;
@@ -23,7 +23,7 @@ public class User {
 
     private @Nullable String profileImageUrlHttps;
 
-    public User() {
+    public UserDTO() {
         // for jackson deserializer
     }
 
@@ -61,7 +61,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserDTO user = (UserDTO) o;
         if (id == 0 || user.id == 0) return screenName.equals(user.screenName);
         return id == user.id && screenName.equals(user.screenName);
     }
@@ -73,7 +73,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "id='" + id + '\'' +
                 ", screenName='" + screenName + '\'' +
                 ", profileImageUrl='" + profileImageUrl + '\'' +

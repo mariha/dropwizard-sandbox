@@ -29,7 +29,7 @@ class TweetDTOTest {
     @Test
     void deserializeJsonWithUnmappedProperties() throws Exception {
         // tweet received as a response contains many other properties then those we are interested in and are deserialized in TweetDTO
-        List<TweetDTO> tweets = mapper.readValue(fixture("twitter-timeline-response.json"), new TypeReference<List<TweetDTO>>(){});
+        List<TweetDTO> tweets = mapper.readValue(fixture("fixtures/twitter-timeline-response.json"), new TypeReference<List<TweetDTO>>(){});
 
         assertThat(tweets).hasSize(1);
         assertSoftly(softly -> {
@@ -47,7 +47,7 @@ class TweetDTOTest {
 
     @Test
     void serializeTweetToJson() throws IOException {
-        List<TweetDTO> tweets = mapper.readValue(fixture("twitter-timeline-response.json"), new TypeReference<List<TweetDTO>>(){});
+        List<TweetDTO> tweets = mapper.readValue(fixture("fixtures/twitter-timeline-response.json"), new TypeReference<List<TweetDTO>>(){});
 
         String json = mapper.writeValueAsString(tweets);
 

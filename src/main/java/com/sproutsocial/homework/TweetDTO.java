@@ -24,7 +24,8 @@ public class TweetDTO {
     @NotEmpty
     private String text;
 
-    private @Valid User user;
+    private @Valid
+    UserDTO user;
 
     public TweetDTO() {
         // for jackson deserializer
@@ -47,7 +48,7 @@ public class TweetDTO {
     }
 
     @JsonProperty(value = "user", required = true)
-    private void setUser(User user) {
+    private void setUser(UserDTO user) {
         this.user = user;
     }
 
@@ -72,7 +73,7 @@ public class TweetDTO {
     }
 
     @JsonProperty("user")
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
