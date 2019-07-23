@@ -23,42 +23,43 @@ public class TwitterHealthCheck extends HealthCheck {
     private static final String rateLimitEndpoint = "https://api.twitter.com/1.1/application/rate_limit_status.json";
 
     private final Client client;
-    private final AccessToken accessToken;
+    private final long functionalUserId;
+    private final AccessTokenService tokenService;
 
-    public TwitterHealthCheck(HomeworkConfiguration config, Client client) {
+    public TwitterHealthCheck(Client client, long functionalUserId, AccessTokenService tokenService) {
         this.client = client;
-
-        // todo from config
-        String oauthToken = "946723726867030016-d7WcwvbRmJHmzRt2qVUcMktrlAfwez4";
-        String oauthTokenSecret = "kIJThIl0YRI1N4vgIcPtpQpt8UTgRgejkQPzndLOwIk8y";
-        this.accessToken = new AccessToken(oauthToken, oauthTokenSecret);
+        this.functionalUserId = functionalUserId;
+        this.tokenService = tokenService;
     }
 
     // invalid authentication credentials (app or user) / unauthorized / app request rate limit exceeded / endpoint is down
     @Override
     protected Result check() {
+        final Optional<AccessToken> accessToken = tokenService.getByTwitterId(functionalUserId);
+        if (!accessToken.isPresent()) {
+            return Result.unhealthy("No credentials found for functional user, health unverified.");
+        }
+
         // request to protected resources
         final Response credentialsVerificationResponse = client.target(verificationEndpoint).request()
-                .property(OAuth1ClientSupport.OAUTH_PROPERTY_ACCESS_TOKEN, accessToken)
+                .property(OAuth1ClientSupport.OAUTH_PROPERTY_ACCESS_TOKEN, accessToken.get())
                 .get();
-
         // todo log
-        System.out.println(credentialsVerificationResponse.toString());
-        System.out.println(credentialsVerificationResponse.readEntity(String.class));
 
-        if (credentialsVerificationResponse.getStatus() != Response.Status.OK.getStatusCode()) {
-            return Result.unhealthy("Credentials verification failed: "+ credentialsVerificationResponse);
+        if (credentialsVerificationResponse.getStatus() != OK.getStatusCode()) {
+            if (credentialsVerificationResponse.getStatus() == UNAUTHORIZED.getStatusCode()) {
+                return Result.unhealthy("Credentials verification failed: "+ credentialsVerificationResponse);
+            } else {
+                return Result.unhealthy("Check twitter API endpoints statuses: https://api.twitterstat.us/#");
+            }
         }
 
         final Response rateLimitResponse = client.target(rateLimitEndpoint).request()
-                .property(OAuth1ClientSupport.OAUTH_PROPERTY_ACCESS_TOKEN, accessToken)
+                .property(OAuth1ClientSupport.OAUTH_PROPERTY_ACCESS_TOKEN, accessToken.get())
                 .get();
-
         // todo log
-        System.out.println(rateLimitResponse.toString());
-        System.out.println(rateLimitResponse.readEntity(String.class));
 
-        if (rateLimitResponse.getStatus() != Response.Status.OK.getStatusCode()) {
+        if (rateLimitResponse.getStatus() != OK.getStatusCode()) {
             return Result.unhealthy("Requests rate limit exceeded: "+ rateLimitResponse);
         }
 

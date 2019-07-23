@@ -1,6 +1,8 @@
 twitterConsumerKey: ***REMOVED***
 twitterConsumerSecret: ***REMOVED***
 
+functionalUserId: 2305278770
+
 twitterEndpoints:
   rootUri: https://api.twitter.com/1.1/
   timelineEndpoint: statuses/home_timeline.json

@@ -5,6 +5,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.db.DataSourceFactory;
 
+import javax.annotation.Nonnegative;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,9 @@ public class HomeworkConfiguration extends Configuration {
 
     @NotNull
     private String twitterConsumerSecret;
+
+    @Nonnegative
+    private long functionalUserId;
 
     @NotNull
     private @Valid TwitterEndpoints twitterEndpoints = new TwitterEndpoints();
@@ -68,5 +72,14 @@ public class HomeworkConfiguration extends Configuration {
     @JsonProperty
     private void setTwitterEndpoints(TwitterEndpoints twitterEndpoints) {
         this.twitterEndpoints = twitterEndpoints;
+    }
+
+    public long getFunctionalUserId() {
+        return functionalUserId;
+    }
+
+    @JsonProperty("functionalUserId")
+    private void setFunctionalUserId(long functionalUserId) {
+        this.functionalUserId = functionalUserId;
     }
 }

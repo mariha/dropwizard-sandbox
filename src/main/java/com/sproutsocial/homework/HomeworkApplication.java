@@ -45,6 +45,7 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
     public void run(final HomeworkConfiguration configuration, final Environment environment) {
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
+        final AccessTokenService tokenService = new AccessTokenService(jdbi);
 
         final Client client = new JerseyClientBuilder(environment)
                 .using(configuration.getJerseyClientConfiguration())
@@ -56,13 +57,12 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
         final Feature oauthFeature = OAuth1ClientSupport.builder(appCredentials).feature().build();
         client.register(oauthFeature);
 
-        environment.jersey().register(new TwitterResource(client, configuration.getTwitterEndpoints(), new AccessTokenService(jdbi)));
+        environment.jersey().register(new TwitterResource(client, configuration.getTwitterEndpoints(), tokenService));
+        environment.healthChecks().register("twitter", new TwitterHealthCheck(client, configuration.getFunctionalUserId(), tokenService));
 
         // json deserialization
         environment.getObjectMapper().registerModule(
                 new SimpleModule().addDeserializer(String.class, new NullStringJsonDeserializer()));
         environment.getObjectMapper().registerModule(new JodaModule());
-
-        environment.healthChecks().register("twitter", new TwitterHealthCheck(configuration, client));
     }
 }
