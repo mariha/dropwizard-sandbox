@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 
 public class HomeworkApplication extends Application<HomeworkConfiguration> {
 
+    private final Logger logger = Logger.getLogger(HomeworkApplication.class.getName());
+
     public static void main(final String[] args) throws Exception {
         new HomeworkApplication().run(args.length > 0 ? args : new String[]{"server", "config.yml"});
     }
@@ -38,6 +40,19 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
     public void initialize(final Bootstrap<HomeworkConfiguration> bootstrap) {
         // log exceptions from the database
         bootstrap.addBundle(new JdbiExceptionsBundle());
+
+        if (System.getProperty("java.util.logging.config.file") == null) {
+            try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("logging.properties")) {
+                if (inputStream != null) {
+                    LogManager.getLogManager().readConfiguration(inputStream);
+                } else {
+                    Logger.getAnonymousLogger().severe("Could not find 'logging.properties' file");
+                }
+            } catch (final IOException e) {
+                Logger.getAnonymousLogger().severe("Could not load 'logging.properties' file");
+                Logger.getAnonymousLogger().severe(e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -50,6 +65,11 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
                 .using(configuration.getJerseyClientConfiguration())
                 .build(getName());
         client.register(JacksonFeature.class);
+
+        // Set logging level to FINE level for request/response logging
+        Feature loggingFeature = new LoggingFeature(logger, Level.FINE, LoggingFeature.Verbosity.PAYLOAD_TEXT,
+                LoggingFeature.DEFAULT_MAX_ENTITY_SIZE);
+        client.register(loggingFeature);
 
         final ConsumerCredentials appCredentials = new ConsumerCredentials(
                 configuration.getTwitterConsumerKey(), configuration.getTwitterConsumerSecret());
