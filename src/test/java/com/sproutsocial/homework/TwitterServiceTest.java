@@ -5,6 +5,7 @@ import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,18 +50,19 @@ class TwitterServiceTest {
     @SmokeTest
     void tweetMessage() {
         given()
-            .pathParam("user-id", 123)
-            .param("message", "Hello, world!").
-        when()
+            .pathParam("user-id", 2305278770L)
+            .param("message", "Hello, world! " + DateTime.now())
+        .when()
             .post("/twitter/{user-id}/tweets")
         .then()
+            .log().all()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
     void tryToUpdateTweets() {
         given()
-            .pathParam("user-id", 123)
+            .pathParam("user-id", 2305278770L)
             .param("message", "Hello, world!")
         .when()
             .put("/twitter/{user-id}/tweets")
@@ -71,7 +73,7 @@ class TwitterServiceTest {
     @Test
     void tryToDeleteTweets() {
         given()
-            .pathParam("user-id", 123)
+            .pathParam("user-id", 2305278770L)
         .when()
             .delete("/twitter/{user-id}/tweets")
         .then()

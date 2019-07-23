@@ -1,18 +1,20 @@
 package com.no-namesocial.homework;
 
+import com.codahale.metrics.annotation.Timed;
 import org.glassfish.jersey.client.oauth1.AccessToken;
 import org.glassfish.jersey.client.oauth1.OAuth1ClientSupport;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,12 +26,14 @@ public class TwitterResource {
 
     private final Client client;
     private final String twitterHomeTimelineEndpoint;
+    private final String twitterUpdateStatusEndpoint;
     private final AccessTokenService accessTokenService;
 
     public TwitterResource(Client client, TwitterEndpoints endpoints, AccessTokenService accessTokenService) {
         this.client = client;
         this.accessTokenService = accessTokenService;
         this.twitterHomeTimelineEndpoint = endpoints.getTimelineEndpoint();
+        this.twitterUpdateStatusEndpoint = endpoints.getUpdateEndpoint();
     }
 
     /*
@@ -43,12 +47,11 @@ public class TwitterResource {
      */
     @GET
     @Path("{user-id}/tweets")
+    @Timed
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchTimeline(@PathParam("user-id") long userId) {
-        final AccessToken accessToken = accessTokenService.getByTwitterId(userId)
-                .orElseThrow(() -> new WebApplicationException(String.format("No access token for user %d", userId), Status.NOT_FOUND));
-
-        final Response response = request(twitterHomeTimelineEndpoint, accessToken).get();
+        final Response response = request(twitterHomeTimelineEndpoint, getAccessToken(userId)).get();
+        System.out.println(response.toString());
         if (response.getStatus() != 200) {
             String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
             throw new WebApplicationException("Request to Twitter was not successful. Response code: "
@@ -67,6 +70,12 @@ public class TwitterResource {
         return Response.ok(tweets.size(), MediaType.APPLICATION_JSON).build();
     }
 
+    private AccessToken getAccessToken(long userId) {
+        String message = String.format("No access token for user %d", userId);
+        return accessTokenService.getByTwitterId(userId)
+                .orElseThrow(() -> new WebApplicationException(message, Status.NOT_FOUND));
+    }
+
     private Invocation.Builder request(String endpoint, AccessToken accessToken) {
         return client.target(endpoint).request()
                 .property(OAuth1ClientSupport.OAUTH_PROPERTY_ACCESS_TOKEN, accessToken);
@@ -81,7 +90,18 @@ public class TwitterResource {
      */
     @POST
     @Path("{user-id}/tweets")
-    public Response postMessage(@PathParam("user-id") String userId, @QueryParam("message") String message) {
-        return Response.noContent().build();
+    @Timed
+    public void postMessage(@PathParam("user-id") long userId, @FormParam("message") String message) {
+        // todo log
+        final Response response = request(twitterUpdateStatusEndpoint, getAccessToken(userId))
+                .post(Entity.form(new Form().param("status", message)));
+        System.out.println(response.toString());
+
+        if (Status.Family.familyOf(response.getStatus()) != Status.Family.SUCCESSFUL) {
+            String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
+            throw new WebApplicationException("Request to Twitter was not successful. Response code: "
+                    + response.getStatus() + ", reason: " + response.getStatusInfo().getReasonPhrase()
+                    + ", entity: " + errorEntity, Status.BAD_REQUEST);
+        }
     }
 }
