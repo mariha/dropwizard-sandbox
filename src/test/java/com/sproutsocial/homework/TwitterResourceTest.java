@@ -8,8 +8,10 @@ import org.glassfish.jersey.client.oauth1.AccessToken;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.GET;
@@ -42,18 +44,22 @@ class TwitterResourceTest {
 
     @Path("/statuses/home_timeline.json")
     public static class TwitterTimelineStub {
+        List<ServiceTweetDTO> answer;
+
         @GET
         @Produces(MediaType.APPLICATION_JSON)
         public List<ServiceTweetDTO> homeTimeline() {
-            return Collections.emptyList();
+            return answer != null ? answer : Collections.emptyList();
         }
     }
 
     @Path("/statuses/update.json")
     public static class TwitterStatusUpdateStub {
+        Response response;
+
         @POST
         public Response updateStatus() {
-            return Response.status(204).build();
+            return response != null ? response : Response.status(204).build();
         }
     }
 
@@ -67,11 +73,14 @@ class TwitterResourceTest {
     private static DropwizardClientExtension remoteEndpoints;
     private static ResourceExtension resources;
 
+    private static TwitterTimelineStub twitterTimelineStub = new TwitterTimelineStub();
+    private static TwitterStatusUpdateStub twitterStatusUpdateStub = new TwitterStatusUpdateStub();
+
     private static AccessTokenService accessTokenService = mock(AccessTokenService.class);
 
     @BeforeAll
     static void initExtensions() throws Throwable {
-        remoteEndpoints = new DropwizardClientExtension(new TwitterTimelineStub(), new TwitterStatusUpdateStub());
+        remoteEndpoints = new DropwizardClientExtension(twitterTimelineStub, twitterStatusUpdateStub);
         remoteEndpoints.before();
 
         TwitterEndpoints endpoints = new TwitterEndpoints(
@@ -97,6 +106,12 @@ class TwitterResourceTest {
     void initMocks() {
         when(accessTokenService.getByTwitterId(anyLong()))
             .thenReturn(Optional.of(new AccessToken("token", "secret")));
+    }
+
+    @AfterEach
+    void resetMocks() {
+        twitterTimelineStub.answer = null;
+        twitterStatusUpdateStub.response = null;
     }
 
     @Test
@@ -131,13 +146,73 @@ class TwitterResourceTest {
     void testPostTweet() {
         // given
         String path = "v1/twitter/123/tweets";
+        String tweet = "Hello, world! " + DateTime.now();
 
         // when
-        Response response = resources.target(path)
-                .queryParam("message", "Hello, world! " + DateTime.now()).request()
-                .post(Entity.form((Form) null));
+        Response response = resources.target(path).request()
+                .post(Entity.form(new Form()
+                        .param("message", tweet)));
 
         // then
-        assertThat(response.getStatus()).isEqualTo(Status.NO_CONTENT.getStatusCode());
+        assertThat(response.getStatus())
+                .as("Response: "+ response)
+                .isEqualTo(Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @Disabled
+    void tweetNeedsToHaveAMessage() {
+        // given
+        String path = "v1/twitter/123/tweets";
+        String tweet = null;
+
+        // when
+        Response response = resources.target(path).request()
+                .post(Entity.form(new Form()
+                        .param("message", tweet)));
+
+        // then
+        assertThat(response.getStatus()).isEqualTo(Status.BAD_REQUEST.getStatusCode());
+        assertThat(response.getStatusInfo().getReasonPhrase()).isEqualTo("Missing required parameter: message.");
+    }
+
+    @Test
+    @Disabled
+    void tweetNeedsToHaveMessageParam() {
+        // given
+        String path = "v1/twitter/123/tweets";
+
+        // when
+        Response response = resources.target(path).request()
+                // no message param
+                .post(Entity.form(new Form()));
+
+        // then
+        assertThat(response.getStatus()).isEqualTo(Status.BAD_REQUEST.getStatusCode());
+        assertThat(response.getStatusInfo().getReasonPhrase()).isEqualTo("Missing required parameter: message.");
+    }
+
+    @Test
+    @Disabled
+    void theSameStatusCanNotBeTweetedTwice() {
+        twitterStatusUpdateStub.response = Response
+                .status(Status.FORBIDDEN)
+                .entity(new ErrorMessage(187, "Status is a duplicate."))
+                .build();
+
+        // given
+        String path = "v1/twitter/123/tweets";
+        String tweet = "Hello, world!";
+
+        // when
+        Response response1 = resources.target(path).request()
+                .post(Entity.form(new Form().param("message", tweet)));
+        assertThat(response1.getStatus()).isEqualTo(204);
+        Response response2 = resources.target(path).request()
+                .post(Entity.form(new Form().param("message", tweet)));
+
+        // then
+        assertThat(response2.getStatus()).isEqualTo(Status.BAD_REQUEST.getStatusCode());
+        assertThat(response2.getStatusInfo().getReasonPhrase()).contains("Status is a duplicate.");
     }
 }

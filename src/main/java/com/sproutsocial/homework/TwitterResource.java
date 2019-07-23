@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 @Path("/v1/twitter")
+@Produces(MediaType.APPLICATION_JSON)
 public class TwitterResource {
 
     private final Client client;
@@ -48,7 +49,6 @@ public class TwitterResource {
     @GET
     @Path("{user-id}/tweets")
     @Timed
-    @Produces(MediaType.APPLICATION_JSON)
     public Response fetchTimeline(@PathParam("user-id") long userId) {
         final Response response = request(twitterHomeTimelineEndpoint, getAccessToken(userId)).get();
         System.out.println(response.toString());
@@ -81,17 +81,14 @@ public class TwitterResource {
                 .property(OAuth1ClientSupport.OAUTH_PROPERTY_ACCESS_TOKEN, accessToken);
     }
 
-    /*
-    Create a second endpoint that does the following:
-    + Accept a "twitter_account.id"
-    - Lookup the Twitter account by id in the sqlite database
-    + Accept a text parameter
-    - Use the credentials associated with the twitter account to send that text as a tweet using Twitter's API
-     */
     @POST
     @Path("{user-id}/tweets")
     @Timed
     public void postMessage(@PathParam("user-id") long userId, @FormParam("message") String message) {
+        if (message == null) { // todo why @NotNull is not working?
+            throw new WebApplicationException("Missing required parameter: message", Status.BAD_REQUEST);
+        }
+
         // todo log
         final Response response = request(twitterUpdateStatusEndpoint, getAccessToken(userId))
                 .post(Entity.form(new Form().param("status", message)));
