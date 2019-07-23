@@ -1,5 +1,9 @@
 package com.no-namesocial.homework;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.no-namesocial.homework.util.NullStringJsonDeserializer;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi3.JdbiFactory;
@@ -9,10 +13,16 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.client.oauth1.ConsumerCredentials;
 import org.glassfish.jersey.client.oauth1.OAuth1ClientSupport;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.logging.LoggingFeature;
 import org.jdbi.v3.core.Jdbi;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Feature;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class HomeworkApplication extends Application<HomeworkConfiguration> {
 
@@ -47,6 +57,12 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
         client.register(oauthFeature);
 
         environment.jersey().register(new TwitterResource(client, configuration.getTwitterEndpoints(), new AccessTokenService(jdbi)));
+
+        // json deserialization
+        environment.getObjectMapper().registerModule(
+                new SimpleModule().addDeserializer(String.class, new NullStringJsonDeserializer()));
+        environment.getObjectMapper().registerModule(new JodaModule());
+
         environment.healthChecks().register("twitter", new TwitterHealthCheck(configuration, client));
     }
 }

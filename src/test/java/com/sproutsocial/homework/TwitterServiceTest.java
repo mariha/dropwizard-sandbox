@@ -38,9 +38,8 @@ class TwitterServiceTest {
 
     @SmokeTest
     void showTimeline() {
-
         given()
-            .pathParam("user-id", 123)
+            .pathParam("user-id", 2305278770L)
         .when()
             .get("/twitter/{user-id}/tweets")
         .then()

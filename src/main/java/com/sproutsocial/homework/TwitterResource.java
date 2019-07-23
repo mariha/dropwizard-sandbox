@@ -50,9 +50,8 @@ public class TwitterResource {
     @GET
     @Path("{user-id}/tweets")
     @Timed
-    public Response fetchTimeline(@PathParam("user-id") long userId) {
+    public List<ServiceTweetDTO> fetchTimeline(@PathParam("user-id") long userId) {
         final Response response = request(twitterHomeTimelineEndpoint, getAccessToken(userId)).get();
-        System.out.println(response.toString());
         if (response.getStatus() != 200) {
             String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
             throw new WebApplicationException("Request to Twitter was not successful. Response code: "
@@ -60,15 +59,7 @@ public class TwitterResource {
                     + ", entity: " + errorEntity);
         }
 
-        final List<ServiceTweetDTO> tweets = response.readEntity(new GenericType<List<ServiceTweetDTO>>() {});
-        // todo translate twitter response to our response
-        System.out.println("Tweets:\n");
-        for (final ServiceTweetDTO tweet : tweets) {
-            System.out.println(tweet.getText());
-            System.out.println("[posted by " + tweet.getUser().getName() + " at " + tweet.getCreatedAt() + "]");
-        }
-
-        return Response.ok(tweets.size(), MediaType.APPLICATION_JSON).build();
+        return response.readEntity(new GenericType<List<ServiceTweetDTO>>() {});
     }
 
     private AccessToken getAccessToken(long userId) {
@@ -86,10 +77,9 @@ public class TwitterResource {
     @Path("{user-id}/tweets")
     @Timed
     public void postMessage(@PathParam("user-id") long userId, @FormParam("message") @NotNull String message) {
-        // todo log
+        // todo logging
         final Response response = request(twitterUpdateStatusEndpoint, getAccessToken(userId))
                 .post(Entity.form(new Form().param("status", message)));
-        System.out.println(response.toString());
 
         if (Status.Family.familyOf(response.getStatus()) != Status.Family.SUCCESSFUL) {
             String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
