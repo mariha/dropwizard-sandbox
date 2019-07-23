@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.glassfish.jersey.client.oauth1.AccessToken;
 import org.glassfish.jersey.client.oauth1.OAuth1ClientSupport;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -84,11 +85,7 @@ public class TwitterResource {
     @POST
     @Path("{user-id}/tweets")
     @Timed
-    public void postMessage(@PathParam("user-id") long userId, @FormParam("message") String message) {
-        if (message == null) { // todo why @NotNull is not working?
-            throw new WebApplicationException("Missing required parameter: message", Status.BAD_REQUEST);
-        }
-
+    public void postMessage(@PathParam("user-id") long userId, @FormParam("message") @NotNull String message) {
         // todo log
         final Response response = request(twitterUpdateStatusEndpoint, getAccessToken(userId))
                 .post(Entity.form(new Form().param("status", message)));

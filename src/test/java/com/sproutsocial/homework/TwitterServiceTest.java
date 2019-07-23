@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.HttpClientConfig.httpClientConfig;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 class TwitterServiceTest {
@@ -57,6 +58,18 @@ class TwitterServiceTest {
         .then()
             .log().all()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    void tweetNeedsToHaveMessage() {
+        given()
+            .pathParam("user-id", 123)
+        .when()
+            .post("/twitter/{user-id}/tweets")
+        .then()
+            .log().all()
+            .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+            .body("errors[0]", equalTo("form field message may not be null"));
     }
 
     @Test
