@@ -39,18 +39,19 @@ public class TwitterResource {
     }
 
     /*
-    Create a REST API endpoint that fulfills the following requirements:
-    + Accept a "twitter_account.id"
-    - Lookup the Twitter account by id in the sqlite database
-    + Use the credentials associated with that account to fetch their home timeline from Twitter's API
-    - Extract the Screen Name, Text, Date, and Profile Image from each object
-    - Transform the date into a Unix Timestamp
-    - Render the result as a JSON response
+     * - int count	optional	[0,200]	20
+     *   Specifies the number of records to retrieve. The value of count is best thought of as a limit to the number of tweets to return because suspended or deleted content is removed after the count has been applied.
+     * - long since_id	optional	exclusive
+     *   Returns results with an ID greater than (that is, more recent than) the specified ID. There are limits to the number of Tweets which can be accessed through the API. If the limit of Tweets has occured since the since_id, the since_id will be forced to the oldest ID available.
+     * - long max_id	optional	inclusive
+     *   Returns results with an ID less than (that is, older than) or equal to the specified ID.
      */
+    // https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-home_timeline.html
+    // https://developer.twitter.com/en/docs/tweets/timelines/guides/working-with-timelines
     @GET
     @Path("{user-id}/tweets")
     @Timed
-    public List<ServiceTweetDTO> fetchTimeline(@PathParam("user-id") long userId) {
+    public List<TweetDTO> fetchTimeline(@PathParam("user-id") long userId) {
         final Response response = request(twitterHomeTimelineEndpoint, getAccessToken(userId)).get();
         if (response.getStatus() != 200) {
             String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
@@ -59,7 +60,7 @@ public class TwitterResource {
                     + ", entity: " + errorEntity);
         }
 
-        return response.readEntity(new GenericType<List<ServiceTweetDTO>>() {});
+        return response.readEntity(new GenericType<List<TweetDTO>>() {});
     }
 
     private AccessToken getAccessToken(long userId) {

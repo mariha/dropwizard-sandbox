@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.GET;
@@ -44,11 +43,11 @@ class TwitterResourceTest {
 
     @Path("/statuses/home_timeline.json")
     public static class TwitterTimelineStub {
-        List<ServiceTweetDTO> answer;
+        List<TweetDTO> answer;
 
         @GET
         @Produces(MediaType.APPLICATION_JSON)
-        public List<ServiceTweetDTO> homeTimeline() {
+        public List<TweetDTO> homeTimeline() {
             return answer != null ? answer : Collections.emptyList();
         }
     }

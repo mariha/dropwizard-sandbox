@@ -16,7 +16,7 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-class ServiceTweetDTOTest {
+class TweetDTOTest {
     private static final ObjectMapper mapper = Jackson.newObjectMapper();
 
     @BeforeAll
@@ -28,12 +28,12 @@ class ServiceTweetDTOTest {
 
     @Test
     void deserializeJsonWithUnmappedProperties() throws Exception {
-        // tweet received as a response contains many other properties then those we are interested in and are deserialized in ServiceTweetDTO
-        List<ServiceTweetDTO> tweets = mapper.readValue(fixture("twitter-timeline-response.json"), new TypeReference<List<ServiceTweetDTO>>(){});
+        // tweet received as a response contains many other properties then those we are interested in and are deserialized in TweetDTO
+        List<TweetDTO> tweets = mapper.readValue(fixture("twitter-timeline-response.json"), new TypeReference<List<TweetDTO>>(){});
 
         assertThat(tweets).hasSize(1);
         assertSoftly(softly -> {
-            ServiceTweetDTO tweet = tweets.get(0);
+            TweetDTO tweet = tweets.get(0);
 
             softly.assertThat(tweet.getCreatedAt()).isEqualTo("Tue Jul 23 04:20:00 +0000 2019");
             softly.assertThat(tweet.getDate()).isEqualTo(1563855600L);
@@ -47,7 +47,7 @@ class ServiceTweetDTOTest {
 
     @Test
     void serializeTweetToJson() throws IOException {
-        List<ServiceTweetDTO> tweets = mapper.readValue(fixture("twitter-timeline-response.json"), new TypeReference<List<ServiceTweetDTO>>(){});
+        List<TweetDTO> tweets = mapper.readValue(fixture("twitter-timeline-response.json"), new TypeReference<List<TweetDTO>>(){});
 
         String json = mapper.writeValueAsString(tweets);
 

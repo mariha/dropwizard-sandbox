@@ -17,7 +17,7 @@ import java.util.Objects;
  * Entity into which twitter message is deserialized.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ServiceTweetDTO {
+public class TweetDTO {
     @NotNull
     private Date createdAt;
 
@@ -26,7 +26,7 @@ public class ServiceTweetDTO {
 
     private @Valid User user;
 
-    public ServiceTweetDTO() {
+    public TweetDTO() {
         // for jackson deserializer
     }
 
@@ -80,7 +80,7 @@ public class ServiceTweetDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ServiceTweetDTO that = (ServiceTweetDTO) o;
+        TweetDTO that = (TweetDTO) o;
         return createdAt.equals(that.createdAt) &&
                 text.equals(that.text) &&
                 user.equals(that.user);
@@ -93,7 +93,7 @@ public class ServiceTweetDTO {
 
     @Override
     public String toString() {
-        return "ServiceTweetDTO{" +
+        return "TweetDTO{" +
                 "createdAt=" + createdAt +
                 ", text='" + text + '\'' +
                 ", user=" + user +
