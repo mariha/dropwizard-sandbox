@@ -20,7 +20,9 @@ class AccessTokenServiceTest {
     static void startTestSupport() {
         testSupport.before();
 
-        final Jdbi jdbi = new JdbiFactory().build(testSupport.getEnvironment(), testSupport.getConfiguration().getDataSourceFactory(),
+        final Jdbi jdbi = new JdbiFactory().build(
+                testSupport.getEnvironment(),
+                testSupport.getConfiguration().getDataSourceFactory(),
                 "sqlite");
         accessTokenService = new AccessTokenService(jdbi);
     }

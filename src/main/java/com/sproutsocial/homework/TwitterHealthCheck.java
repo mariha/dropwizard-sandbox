@@ -6,6 +6,10 @@ import org.glassfish.jersey.client.oauth1.OAuth1ClientSupport;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
+
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 /**
  * Verifies Twitter service. The check will pass if:
@@ -14,7 +18,7 @@ import javax.ws.rs.core.Response;
  *  - user authorized the app,
  *  - request rate limits are not exceeded
  */
-// see: https://oauth.net/core/1.0a/
+// see: https://oauth.net/core/1.0a/#anchor9
 // todo why not OAuth 2.0?
 public class TwitterHealthCheck extends HealthCheck {
 

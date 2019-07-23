@@ -1,6 +1,5 @@
 package com.no-namesocial.homework;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.no-namesocial.homework.util.NullStringJsonDeserializer;
@@ -27,7 +26,7 @@ import java.util.logging.Logger;
 public class HomeworkApplication extends Application<HomeworkConfiguration> {
 
     public static void main(final String[] args) throws Exception {
-        new HomeworkApplication().run(args);
+        new HomeworkApplication().run(args.length > 0 ? args : new String[]{"server", "config.yml"});
     }
 
     @Override
@@ -58,7 +57,8 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
         client.register(oauthFeature);
 
         environment.jersey().register(new TwitterResource(client, configuration.getTwitterEndpoints(), tokenService));
-        environment.healthChecks().register("twitter", new TwitterHealthCheck(client, configuration.getFunctionalUserId(), tokenService));
+        environment.healthChecks().register("twitter",
+                new TwitterHealthCheck(client, configuration.getFunctionalUserId(), tokenService));
 
         // json deserialization
         environment.getObjectMapper().registerModule(
