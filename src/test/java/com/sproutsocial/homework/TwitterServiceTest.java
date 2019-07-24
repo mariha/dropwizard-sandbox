@@ -23,6 +23,8 @@ class TwitterServiceTest {
     private static final DropwizardAppExtension<HomeworkConfiguration> dropwizardApp =
             new DropwizardAppExtension<>(HomeworkApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
 
+    private long userId;
+
     @BeforeAll
     static void initEndpoint() {
         RestAssured.baseURI = "http://localhost";
@@ -32,14 +34,15 @@ class TwitterServiceTest {
 
     @BeforeEach
     void setUp() {
+        userId = dropwizardApp.getConfiguration().getFunctionalUserId();
+
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        RestAssured.config = RestAssured.config().httpClient(httpClientConfig().reuseHttpClientInstance());
     }
 
     @SmokeTest
     void showTimeline() {
         given()
-            .pathParam("user-id", 2305278770L)
+            .pathParam("user-id", userId)
         .when()
             .get("/twitter/{user-id}/tweets")
         .then()
@@ -50,7 +53,7 @@ class TwitterServiceTest {
     @SmokeTest
     void tweetMessage() {
         given()
-            .pathParam("user-id", 2305278770L)
+            .pathParam("user-id", userId)
             .param("message", "Hello, world! " + DateTime.now())
         .when()
             .post("/twitter/{user-id}/tweets")
@@ -62,7 +65,7 @@ class TwitterServiceTest {
     @Test
     void tweetNeedsToHaveMessage() {
         given()
-            .pathParam("user-id", 123)
+            .pathParam("user-id", userId)
         .when()
             .post("/twitter/{user-id}/tweets")
         .then()
@@ -74,7 +77,7 @@ class TwitterServiceTest {
     @Test
     void tryToUpdateTweets() {
         given()
-            .pathParam("user-id", 2305278770L)
+            .pathParam("user-id", userId)
             .param("message", "Hello, world!")
         .when()
             .put("/twitter/{user-id}/tweets")
@@ -85,7 +88,7 @@ class TwitterServiceTest {
     @Test
     void tryToDeleteTweets() {
         given()
-            .pathParam("user-id", 2305278770L)
+            .pathParam("user-id", userId)
         .when()
             .delete("/twitter/{user-id}/tweets")
         .then()

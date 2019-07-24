@@ -1,7 +1,10 @@
 twitterConsumerKey: ***REMOVED***
 twitterConsumerSecret: ***REMOVED***
 
-functionalUserId: 2305278770
+# no-name
+#functionalUserId: 2305278770
+# mariha
+functionalUserId: 123
 
 twitterEndpoints:
   rootUri: https://api.twitter.com/1.1/
