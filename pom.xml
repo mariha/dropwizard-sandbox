@@ -162,12 +162,13 @@
                 <version>1.2.1</version>
                 <configuration>
                     <apiToken>${SNYK_API_TOKEN}</apiToken>
-                    <failOnSeverity>medium</failOnSeverity>
+                    <!-- warn but do not fail the build -->
+                    <failOnSeverity>false</failOnSeverity>
                 </configuration>
                 <executions>
                     <execution>
                         <id>snyk-test</id>
-                        <phase>test</phase>
+                        <phase>verify</phase>
                         <goals>
                             <!-- presents a list of vulnerabilities in your project's dependencies -->
                             <goal>test</goal>
