@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
-@Path("/v1/twitter")
+@Path("/v1/twitter/{user-id}/tweets")
 @Produces(MediaType.APPLICATION_JSON)
 public class TwitterResource {
 
@@ -49,7 +49,6 @@ public class TwitterResource {
     // https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-home_timeline.html
     // https://developer.twitter.com/en/docs/tweets/timelines/guides/working-with-timelines
     @GET
-    @Path("{user-id}/tweets")
     @Timed
     public List<TweetDTO> fetchTimeline(@PathParam("user-id") long userId) {
         final Response response = request(twitterHomeTimelineEndpoint, getAccessToken(userId)).get();
@@ -57,7 +56,7 @@ public class TwitterResource {
             String errorEntity = response.hasEntity() ? response.readEntity(String.class) : null;
             throw new WebApplicationException("Request to Twitter was not successful. Response code: "
                     + response.getStatus() + ", reason: " + response.getStatusInfo().getReasonPhrase()
-                    + ", entity: " + errorEntity);
+                    + ", answer from twitter: " + errorEntity);
         }
 
         return response.readEntity(new GenericType<List<TweetDTO>>() {});
@@ -75,7 +74,6 @@ public class TwitterResource {
     }
 
     @POST
-    @Path("{user-id}/tweets")
     @Timed
     public void postMessage(@PathParam("user-id") long userId, @FormParam("message") @NotNull String message) {
         // todo logging
