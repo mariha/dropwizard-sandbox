@@ -38,3 +38,6 @@ jobs:
 
       # run tests!
       - run: mvn verify -Dsurefire.useSystemClassLoader=false -Dfailsafe.useSystemClassLoader=false
+
+      - store_test_results:
+              path: target/test-results

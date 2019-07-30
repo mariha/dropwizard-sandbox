@@ -19,6 +19,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <dropwizard.version>1.3.12</dropwizard.version>
+        <test-results>${project.build.directory}/test-results</test-results>
         <mainClass>com.no-namesocial.homework.HomeworkApplication</mainClass>
     </properties>
 
@@ -104,6 +105,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <excludedGroups>smoke-test</excludedGroups>
+                    <reportsDirectory>${test-results}/unit-tests</reportsDirectory>
                 </configuration>
             </plugin>
 
@@ -115,6 +117,7 @@
                         <include>**/*.java</include>
                     </includes>
                     <groups>smoke-test</groups>
+                    <reportsDirectory>${test-results}/smoke-tests</reportsDirectory>
                 </configuration>
                 <executions>
                     <execution>
