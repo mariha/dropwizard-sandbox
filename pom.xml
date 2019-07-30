@@ -132,7 +132,7 @@
                 <configuration>
                     <rules>
                         <requireMavenVersion>
-                            <version>3.0.0</version>
+                            <version>3.1.0</version>
                         </requireMavenVersion>
 
                         <!-- Ensure JRE 1.8.x -->
@@ -150,6 +150,35 @@
                     <execution>
                         <goals>
                             <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- test dependencies for known security vulnerabilities -->
+                <groupId>io.snyk</groupId>
+                <artifactId>snyk-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <apiToken>${SNYK_API_TOKEN}</apiToken>
+                    <failOnSeverity>medium</failOnSeverity>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>snyk-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <!-- presents a list of vulnerabilities in your project's dependencies -->
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>snyk-monitor</id>
+                        <phase>install</phase>
+                        <goals>
+                            <!-- records the state of dependencies and any vulnerabilities on snyk.io so you can be alerted when new vulnerabilities or updates/patches are disclosed that affect your dependencies -->
+                            <goal>monitor</goal>
                         </goals>
                     </execution>
                 </executions>
