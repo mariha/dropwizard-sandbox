@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/mariha/no-name.svg?style=svg&circle-token=a602ace1aa2d081084fff26506f41131483ea483)](https://circleci.com/gh/mariha/no-name)
+
 Instructions
 ---------------
 You will implement a basic REST API. The project is configured with a sqlite database (no-name.db) containing credentials for a Twitter account that can be used to access their REST API. The project contains configuration in the appropriate place which contains an Application Token and Secret for making authenticated requests against Twitter's API.
