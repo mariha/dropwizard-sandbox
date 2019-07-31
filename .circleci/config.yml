@@ -37,18 +37,15 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn verify -Dsurefire.useSystemClassLoader=false -Dfailsafe.useSystemClassLoader=false | tee >(grep "\[WARNING\]" > warns.output)
+      - run: mvn verify -Dsurefire.useSystemClassLoader=false -Dfailsafe.useSystemClassLoader=false
 
       - store_test_results:
           path: target/test-results
 
       - store_artifacts:
-          name: Test results
+          name: Storing test results
           path: target/test-results
+          destination: test-results
       - store_artifacts:
-          name: Logs
+          name: Storing logs
           path: logs
-      - store_artifacts:
-          name: Warnings in build process
-          path: warns.output
-#          destination: logs
