@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/mariha/no-name.svg?style=svg&circle-token=a602ace1aa2d081084fff26506f41131483ea483)](https://circleci.com/gh/mariha/no-name)
+[![CircleCI](https://circleci.com/gh/mariha/dropwizard-sandbox.svg?style=svg&circle-token=a602ace1aa2d081084fff26506f41131483ea483)](https://circleci.com/gh/mariha/dropwizard-sandbox)
 
 Instructions
 ---------------

@@ -11,4 +11,4 @@ server:
 
 database:
   driverClass: org.sqlite.JDBC
-  url: jdbc:sqlite:no-name.db
+  url: jdbc:sqlite:sandbox.db

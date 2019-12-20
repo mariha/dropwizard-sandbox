@@ -1,4 +1,4 @@
-package com.no-namesocial.homework.util;
+package pl.wanderers.sandbox.dropwizard.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

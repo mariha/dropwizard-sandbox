@@ -1,4 +1,4 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

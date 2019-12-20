@@ -1,4 +1,4 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
 import io.dropwizard.testing.junit5.DropwizardClientExtension;

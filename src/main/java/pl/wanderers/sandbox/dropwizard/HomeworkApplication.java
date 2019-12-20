@@ -1,8 +1,8 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.no-namesocial.homework.util.NullStringJsonDeserializer;
+import pl.wanderers.sandbox.dropwizard.util.NullStringJsonDeserializer;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi3.JdbiFactory;

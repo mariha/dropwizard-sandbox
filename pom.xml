@@ -6,12 +6,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.no-namesocial</groupId>
-    <artifactId>homework</artifactId>
+    <groupId>pl.wanderers</groupId>
+    <artifactId>dropwizard-sandbox</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Homework</name>
+    <name>Dropwizard sandbox</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <dropwizard.version>1.3.12</dropwizard.version>
         <test-results>${project.build.directory}/test-results</test-results>
-        <mainClass>com.no-namesocial.homework.HomeworkApplication</mainClass>
+        <mainClass>pl.wanderers.sandbox.dropwizard.HomeworkApplication</mainClass>
     </properties>
 
     <dependencyManagement>

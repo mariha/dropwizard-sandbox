@@ -1,10 +1,10 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.no-namesocial.homework.util.NullStringJsonDeserializer;
+import pl.wanderers.sandbox.dropwizard.util.NullStringJsonDeserializer;
 import io.dropwizard.jackson.Jackson;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

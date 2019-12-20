@@ -1,4 +1,4 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.config.HttpClientConfig.httpClientConfig;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 @ExtendWith(DropwizardExtensionsSupport.class)

@@ -1,4 +1,4 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import com.codahale.metrics.health.HealthCheck;
 import org.glassfish.jersey.client.oauth1.AccessToken;

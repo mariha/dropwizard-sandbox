@@ -1,7 +1,7 @@
 twitterConsumerKey: ***REMOVED***
 twitterConsumerSecret: ***REMOVED***
 
-# no-name
+# preconfigured
 #functionalUserId: 2305278770
 # mariha
 functionalUserId: 123
@@ -29,7 +29,7 @@ jerseyClient:
 
 database:
   driverClass: org.sqlite.JDBC
-  url: jdbc:sqlite:no-name.db
+  url: jdbc:sqlite:sandbox.db
   properties:
     charSet: UTF-8
   maxWaitForConnection: 1s

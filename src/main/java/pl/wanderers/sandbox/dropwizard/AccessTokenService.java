@@ -1,4 +1,4 @@
-package com.no-namesocial.homework;
+package pl.wanderers.sandbox.dropwizard;
 
 import org.glassfish.jersey.client.oauth1.AccessToken;
 import org.jdbi.v3.core.Handle;
