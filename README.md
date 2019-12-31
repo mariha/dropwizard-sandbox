@@ -6,7 +6,7 @@ The service loads configuration from yaml file. Exposed REST endpoint accepts JS
 
 Setup
 -------
-The project expects configuration ('config.yml') containing an Application Token and Secret for making authenticated requests against Twitter's REST API and sqlite database ('sandbox.db') containing credentials for a Twitter account that can be used to access their API.
+The project expects configuration (`config.yml`) containing an Application Token and Secret for making authenticated requests against Twitter's REST API and sqlite database (`sandbox.db`) containing credentials for a Twitter account that can be used to access their API.
 
 * Install java 8
 * `brew install maven`
