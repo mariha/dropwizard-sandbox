@@ -1,8 +1,8 @@
-twitterConsumerKey: ***REMOVED***
-twitterConsumerSecret: ***REMOVED***
+# TODO-config https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens
+twitterConsumerKey: xxx
+twitterConsumerSecret: xxx
 
-# preconfigured
-#functionalUserId: 2305278770
+# TODO-config twitter_id in sandbox.db
 # mariha
 functionalUserId: 123
 
