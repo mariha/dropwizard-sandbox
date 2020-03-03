@@ -1,8 +1,8 @@
 [![CircleCI](https://circleci.com/gh/mariha/dropwizard-sandbox.svg?style=svg&circle-token=a602ace1aa2d081084fff26506f41131483ea483)](https://circleci.com/gh/mariha/dropwizard-sandbox)
 
-Simple microservice built with Dropwizard. An endpoint with REST API to post messages and read timeline of a given Twitter account. 
+Simple microservice built with Dropwizard. An endpoint with REST API to post messages and read timeline of a Twitter account. 
 
-The service loads configuration from yaml file. Exposed REST endpoint accepts JSON requests, lookups the Twitter account by given id in the sqlite database, using pre-configured Application Token and Secret makes authenticated requests against Twitter's API. After receiving an answer, it extracts name, date and text from the response and after making simple format transformations sends them back to the user in JSON format.
+The service loads configuration from yaml file. Exposed endpoint with REST API accepts JSON requests, lookups the Twitter account by given id in the sqlite database, using pre-configured Application Token and Secret makes authenticated requests against Twitter's API. After receiving an answer, it extracts name, date and text from the response and after making simple format transformations sends them back to the user in JSON format.
 
 Setup
 -------
