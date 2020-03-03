@@ -1,5 +1,7 @@
-twitterConsumerKey: ***REMOVED***
-twitterConsumerSecret: ***REMOVED***
+#twitterConsumerKey: consumer-key-to-be-overwritten
+#twitterConsumerSecret: consumer-secret-to-be-overwritten
+twitterConsumerKey: xyz
+twitterConsumerSecret: xyz
 
 functionalUserId: 123
 

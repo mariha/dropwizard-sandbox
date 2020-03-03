@@ -34,7 +34,7 @@ class AccessTokenServiceTest {
 
     @Test
     void getExistingToken() {
-        assertThat(accessTokenService.getByTwitterId(2_305_278_770L).isPresent()).isTrue();
+        assertThat(accessTokenService.getByTwitterId(123L).isPresent()).isTrue();
     }
 
     @Test
