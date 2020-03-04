@@ -20,10 +20,10 @@ The project expects configuration (`config.yml`) containing an Application Token
 Build & run
 --------
 * `mvn test` - to compile and run unit tests
-* `mvn package` - to build fat jar in `target/homework-*.jar`
+* `mvn package` - to build fat jar in `target/dropwizard-sandbox-*.jar`
 * `mvn verify` - to run smoke tests hitting twitter endpoint
 
-* `java -jar target/homework-*.jar` - to start the app, will load config from `config.yml`
+* `java -jar target/dropwizard-sandbox--*.jar` - to start the app, will load config from `config.yml`
     * `localhost:8080/api/twitter/{user-id}/tweets` - endpoints to GET timeline and POST a tweet
     * `localhost:8080` - admin
     * `logs/*` - various logs
