@@ -9,7 +9,7 @@ import javax.annotation.Nonnegative;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class HomeworkConfiguration extends Configuration {
+public class SandboxConfiguration extends Configuration {
 
     @NotNull
     private String twitterConsumerKey;

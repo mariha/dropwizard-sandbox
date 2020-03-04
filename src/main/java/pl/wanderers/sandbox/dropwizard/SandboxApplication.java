@@ -25,21 +25,21 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class HomeworkApplication extends Application<HomeworkConfiguration> {
+public class SandboxApplication extends Application<SandboxConfiguration> {
 
-    private final Logger logger = Logger.getLogger(HomeworkApplication.class.getName());
+    private final Logger logger = Logger.getLogger(SandboxApplication.class.getName());
 
     public static void main(final String[] args) throws Exception {
-        new HomeworkApplication().run(args.length > 0 ? args : new String[]{"server", "config.yml"});
+        new SandboxApplication().run(args.length > 0 ? args : new String[]{"server", "config.yml"});
     }
 
     @Override
     public String getName() {
-        return "Homework";
+        return "Sandbox";
     }
 
     @Override
-    public void initialize(final Bootstrap<HomeworkConfiguration> bootstrap) {
+    public void initialize(final Bootstrap<SandboxConfiguration> bootstrap) {
         // Enable variable substitution with environment variables
         bootstrap.setConfigurationSourceProvider(
                 new SubstitutingSourceProvider(
@@ -65,7 +65,7 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
     }
 
     @Override
-    public void run(final HomeworkConfiguration configuration, final Environment environment) {
+    public void run(final SandboxConfiguration configuration, final Environment environment) {
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
         final AccessTokenService tokenService = new AccessTokenService(jdbi);

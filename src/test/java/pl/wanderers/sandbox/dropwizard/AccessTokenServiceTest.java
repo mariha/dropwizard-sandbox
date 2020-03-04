@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AccessTokenServiceTest {
 
-    private static final DropwizardTestSupport<HomeworkConfiguration> testSupport =
-            new DropwizardTestSupport<>(HomeworkApplication.class, "config.yml");
+    private static final DropwizardTestSupport<SandboxConfiguration> testSupport =
+            new DropwizardTestSupport<>(SandboxApplication.class, "config.yml");
 
     private static AccessTokenService accessTokenService;
 

@@ -23,11 +23,11 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-class HomeworkConfigurationTest {
+class SandboxConfigurationTest {
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
-    private final YamlConfigurationFactory<HomeworkConfiguration> factory =
-            new YamlConfigurationFactory<>(HomeworkConfiguration.class, validator, objectMapper, "dw");
+    private final YamlConfigurationFactory<SandboxConfiguration> factory =
+            new YamlConfigurationFactory<>(SandboxConfiguration.class, validator, objectMapper, "dw");
 
     @Test
     void twitterConsumerKeyIsMandatory() throws Exception {
@@ -65,7 +65,7 @@ class HomeworkConfigurationTest {
         final File yml = new File(Resources.getResource("config.yml").toURI());
 
         // when
-        final HomeworkConfiguration config = factory.build(yml);
+        final SandboxConfiguration config = factory.build(yml);
 
         // then
         assertThat(config.getTwitterEndpoints().getTimelineEndpoint()).isEqualTo("https://api.twitter.com/1.1/statuses/home_timeline.json");

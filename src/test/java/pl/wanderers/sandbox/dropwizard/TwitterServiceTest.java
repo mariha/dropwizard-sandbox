@@ -19,8 +19,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 @ExtendWith(DropwizardExtensionsSupport.class)
 class TwitterServiceTest {
 
-    private static final DropwizardAppExtension<HomeworkConfiguration> dropwizardApp =
-            new DropwizardAppExtension<>(HomeworkApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
+    private static final DropwizardAppExtension<SandboxConfiguration> dropwizardApp =
+            new DropwizardAppExtension<>(SandboxApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
 
     private long userId;
 
