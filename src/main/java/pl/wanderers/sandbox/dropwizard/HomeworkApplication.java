@@ -2,9 +2,10 @@ package pl.wanderers.sandbox.dropwizard;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import pl.wanderers.sandbox.dropwizard.util.NullStringJsonDeserializer;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.jdbi3.bundles.JdbiExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -14,6 +15,7 @@ import org.glassfish.jersey.client.oauth1.OAuth1ClientSupport;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.jdbi.v3.core.Jdbi;
+import pl.wanderers.sandbox.dropwizard.util.NullStringJsonDeserializer;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Feature;
@@ -38,6 +40,13 @@ public class HomeworkApplication extends Application<HomeworkConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<HomeworkConfiguration> bootstrap) {
+        // Enable variable substitution with environment variables
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(
+                        bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor())
+        );
+
         // log exceptions from the database
         bootstrap.addBundle(new JdbiExceptionsBundle());
 

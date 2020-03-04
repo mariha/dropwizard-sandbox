@@ -1,7 +1,5 @@
-#twitterConsumerKey: consumer-key-to-be-overwritten
-#twitterConsumerSecret: consumer-secret-to-be-overwritten
-twitterConsumerKey: xyz
-twitterConsumerSecret: xyz
+twitterConsumerKey: $TWITTER_CONSUMER_KEY
+twitterConsumerSecret: $TWITTER_CONSUMER_SECRET
 
 functionalUserId: 123
 
