@@ -68,7 +68,8 @@ public class SandboxApplication extends Application<SandboxConfiguration> {
     public void run(final SandboxConfiguration configuration, final Environment environment) {
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
-        final AccessTokenService tokenService = new AccessTokenService(jdbi);
+        final AccessTokenRepository tokenRepository = new AccessTokenRepository(jdbi);
+        final AccessTokenService tokenService = new AccessTokenService(tokenRepository);
 
         final Client client = new JerseyClientBuilder(environment)
                 .using(configuration.getJerseyClientConfiguration())

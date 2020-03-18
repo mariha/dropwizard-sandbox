@@ -1,44 +1,34 @@
 package pl.wanderers.sandbox.dropwizard;
 
-import io.dropwizard.jdbi3.JdbiFactory;
-import io.dropwizard.testing.DropwizardTestSupport;
-import org.jdbi.v3.core.Jdbi;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.glassfish.jersey.client.oauth1.AccessToken;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AccessTokenServiceTest {
 
-    private static final DropwizardTestSupport<SandboxConfiguration> testSupport =
-            new DropwizardTestSupport<>(SandboxApplication.class, "config.yml");
+    private AccessTokenRepository repo = mock(AccessTokenRepository.class);
+    private AccessTokenService service = new AccessTokenService(repo);
 
-    private static AccessTokenService accessTokenService;
-
-    @BeforeAll
-    static void startTestSupport() {
-        testSupport.before();
-
-        final Jdbi jdbi = new JdbiFactory().build(
-                testSupport.getEnvironment(),
-                testSupport.getConfiguration().getDataSourceFactory(),
-                "sqlite");
-        accessTokenService = new AccessTokenService(jdbi);
-    }
-
-    @AfterAll
-    static void stopTestSupport() {
-        testSupport.after();
+    @BeforeEach
+    void setUp() {
+        when(repo.getById(anyLong())).thenReturn(Optional.empty());
+        when(repo.getById(123L)).thenReturn(Optional.of(new AccessToken("token", "secret")));
     }
 
     @Test
     void getExistingToken() {
-        assertThat(accessTokenService.getByTwitterId(123L).isPresent()).isTrue();
+        assertThat(service.getByTwitterId(123L).isPresent()).isTrue();
     }
 
     @Test
     void getNonExistingToken() {
-        assertThat(accessTokenService.getByTwitterId(12121).isPresent()).isFalse();
+        assertThat(service.getByTwitterId(12121).isPresent()).isFalse();
     }
 }
