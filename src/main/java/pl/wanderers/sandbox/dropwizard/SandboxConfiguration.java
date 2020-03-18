@@ -8,6 +8,7 @@ import io.dropwizard.db.DataSourceFactory;
 import javax.annotation.Nonnegative;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.nio.charset.StandardCharsets;
 
 public class SandboxConfiguration extends Configuration {
 
@@ -17,14 +18,19 @@ public class SandboxConfiguration extends Configuration {
     @NotNull
     private String twitterConsumerSecret;
 
+    @NotNull
+    private byte[] dbEncryptionKey;
+
     @Nonnegative
     private long functionalUserId;
 
     @NotNull
-    private @Valid TwitterEndpoints twitterEndpoints = new TwitterEndpoints();
+    private @Valid
+    TwitterEndpoints twitterEndpoints = new TwitterEndpoints();
 
     @NotNull
-    private @Valid DataSourceFactory database = new DataSourceFactory();
+    private @Valid
+    DataSourceFactory database = new DataSourceFactory();
 
     @NotNull
     private @Valid JerseyClientConfiguration jerseyClient = new JerseyClientConfiguration();
@@ -81,5 +87,18 @@ public class SandboxConfiguration extends Configuration {
     @JsonProperty("functionalUserId")
     private void setFunctionalUserId(long functionalUserId) {
         this.functionalUserId = functionalUserId;
+    }
+
+    public byte[] getDbEncryptionKey() {
+        return dbEncryptionKey;
+    }
+
+    @JsonProperty("dbEncryptionKey")
+    public void setDbEncryptionKey(String dbEncryptionKey) {
+        this.dbEncryptionKey = dbEncryptionKey.getBytes(StandardCharsets.UTF_8); // 128 bit key
+        // todo validate with the framework
+        if (this.dbEncryptionKey.length != 16) {
+            throw new IllegalArgumentException("encryption key is too short");
+        }
     }
 }

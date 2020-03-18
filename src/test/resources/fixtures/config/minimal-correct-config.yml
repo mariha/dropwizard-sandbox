@@ -1,6 +1,8 @@
 twitterConsumerKey: x
 twitterConsumerSecret: y
 
+dbEncryptionKey: Bar12345Bar12345
+
 twitterEndpoints:
   rootUri: https://api.twitter.com/1.1/
   timelineEndpoint: statuses/home_timeline.json

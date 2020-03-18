@@ -7,9 +7,11 @@ import java.util.Optional;
 public class AccessTokenService {
 
     private final AccessTokenRepository repo;
+    private final byte[] dbEncryptionKey;
 
-    public AccessTokenService(AccessTokenRepository repo) {
+    public AccessTokenService(AccessTokenRepository repo, byte[] dbEncryptionKey) {
         this.repo = repo;
+        this.dbEncryptionKey = dbEncryptionKey;
     }
 
     Optional<AccessToken> getByTwitterId(long id) {

@@ -10,7 +10,6 @@ import io.dropwizard.jersey.validation.Validators;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.Validator;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -117,6 +116,21 @@ class SandboxConfigurationTest {
                 .hasMessageContaining("twitterEndpoints.updateEndpoint may not be empty");
     }
 
+    @Test
+    void dbEncryptionKey_isMandatory() throws Exception {
+        // given
+        ConfigurationSourceProvider configProvider = ConfigProviderBuilder.minimalCorrectConfig()
+                .removeProperty("dbEncryptionKey")
+                .build();
+
+        // when
+        final Throwable thrown = catchThrowable(() -> factory.build(configProvider, ""));
+
+        // then
+        assertThat(thrown).isInstanceOf(ConfigurationValidationException.class)
+                .hasMessageContaining("dbEncryptionKey may not be null");
+    }
+
     static class ConfigProviderBuilder {
 
         private static final String minimalCorrectConfig = "fixtures/config/minimal-correct-config.yml";
@@ -141,7 +155,7 @@ class SandboxConfigurationTest {
         }
 
         public ConfigProviderBuilder resetPropertyValue(String property, String value) {
-            lines = lines.map(line -> line.contains(property) ? line.substring(0, line.indexOf(':') + 1) + value : line);
+            lines = lines.map(line -> line.contains(property) ? line.substring(0, line.indexOf(':') + 1) + " " + value : line);
             return this;
         }
 

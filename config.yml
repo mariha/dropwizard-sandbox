@@ -5,6 +5,7 @@ twitterConsumerSecret: $TWITTER_CONSUMER_SECRET
 # TODO-config twitter_id in sandbox.db
 # mariha
 functionalUserId: 123
+dbEncryptionKey: $DB_ENCRYPTION_KEY
 
 twitterEndpoints:
   rootUri: https://api.twitter.com/1.1/

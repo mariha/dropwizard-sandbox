@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 class AccessTokenServiceTest {
 
     private AccessTokenRepository repo = mock(AccessTokenRepository.class);
-    private AccessTokenService service = new AccessTokenService(repo);
+    private AccessTokenService service = new AccessTokenService(repo, "Bar12345Bar12345".getBytes());
 
     @BeforeEach
     void setUp() {
