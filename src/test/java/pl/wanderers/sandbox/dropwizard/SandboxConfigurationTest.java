@@ -7,6 +7,7 @@ import io.dropwizard.configuration.ConfigurationValidationException;
 import io.dropwizard.configuration.YamlConfigurationFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
+import io.dropwizard.testing.ResourceHelpers;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.Validator;
@@ -61,7 +62,7 @@ class SandboxConfigurationTest {
     @Test
     void twitterEndpointsContainRootUri() throws Exception {
         // given
-        final File yml = new File(Resources.getResource("config.yml").toURI());
+        final File yml = new File(ResourceHelpers.resourceFilePath("config.yml"));
 
         // when
         final SandboxConfiguration config = factory.build(yml);
@@ -130,6 +131,37 @@ class SandboxConfigurationTest {
         assertThat(thrown).isInstanceOf(ConfigurationValidationException.class)
                 .hasMessageContaining("dbEncryptionKey may not be null");
     }
+
+    @Test
+    void dbEncryptionKey_has128bits_notLess() throws Exception {
+        // given
+        ConfigurationSourceProvider configProvider = ConfigProviderBuilder.minimalCorrectConfig()
+                .resetPropertyValue("dbEncryptionKey", "here_are15chars")
+                .build();
+
+        // when
+        final Throwable thrown = catchThrowable(() -> factory.build(configProvider, ""));
+
+        // then
+        assertThat(thrown).isInstanceOf(ConfigurationValidationException.class)
+                .hasMessageContaining("dbEncryptionKey has to have 128 UTF-8 encoded bits (= 16 chars * 8 bits, if only ASCII chars are used)");
+    }
+
+    @Test
+    void dbEncryptionKey_has128bits_notMore() throws Exception {
+        // given
+        ConfigurationSourceProvider configProvider = ConfigProviderBuilder.minimalCorrectConfig()
+                .resetPropertyValue("dbEncryptionKey", "here_are_17_chars")
+                .build();
+
+        // when
+        final Throwable thrown = catchThrowable(() -> factory.build(configProvider, ""));
+
+        // then
+        assertThat(thrown).isInstanceOf(ConfigurationValidationException.class)
+                .hasMessageContaining("dbEncryptionKey has to have 128 UTF-8 encoded bits (= 16 chars * 8 bits, if only ASCII chars are used)");
+    }
+
 
     static class ConfigProviderBuilder {
 

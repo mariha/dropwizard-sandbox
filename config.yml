@@ -5,6 +5,7 @@ twitterConsumerSecret: $TWITTER_CONSUMER_SECRET
 # TODO-config twitter_id in sandbox.db
 # mariha
 functionalUserId: 123
+# the encryption key has to have 128 bits UTF-8 encoded = 16 chars * 8 bits each, if only ASCII chars are used
 dbEncryptionKey: $DB_ENCRYPTION_KEY
 
 twitterEndpoints:

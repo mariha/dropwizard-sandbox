@@ -2,6 +2,7 @@ package pl.wanderers.sandbox.dropwizard;
 
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.testing.DropwizardTestSupport;
+import io.dropwizard.testing.ResourceHelpers;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AccessTokenRepositoryTest {
 
     private static final DropwizardTestSupport<SandboxConfiguration> testSupport =
-            new DropwizardTestSupport<>(SandboxApplication.class, "config.yml");
+            new DropwizardTestSupport<>(SandboxApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
 
     private static AccessTokenRepository accessTokenRepository;
 
