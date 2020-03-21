@@ -1,6 +1,5 @@
 package pl.wanderers.sandbox.dropwizard;
 
-import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.restassured.RestAssured;
@@ -20,7 +19,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 class TwitterServiceTest {
 
     private static final DropwizardAppExtension<SandboxConfiguration> dropwizardApp =
-            new DropwizardAppExtension<>(SandboxApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
+            new DropwizardAppExtension<>(SandboxApplication.class, "config.yml"); // loads main config, does env variables substitution
 
     private long userId;
 

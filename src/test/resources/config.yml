@@ -1,5 +1,5 @@
-twitterConsumerKey: $TWITTER_CONSUMER_KEY
-twitterConsumerSecret: $TWITTER_CONSUMER_SECRET
+twitterConsumerKey: "the-app-twitter-key"
+twitterConsumerSecret: "the-app-twitter-secret-like-0sdqFTL3k58JhRj"
 
 functionalUserId: 123
 dbEncryptionKey: "-16-ASCII-chars-"

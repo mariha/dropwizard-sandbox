@@ -1,12 +1,12 @@
 # TODO-config https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens
-twitterConsumerKey: $TWITTER_CONSUMER_KEY
-twitterConsumerSecret: $TWITTER_CONSUMER_SECRET
+twitterConsumerKey: ${TWITTER_CONSUMER_KEY}
+twitterConsumerSecret: ${TWITTER_CONSUMER_SECRET}
 
 # TODO-config twitter_id in sandbox.db
 # mariha
 functionalUserId: 123
 # the encryption key has to have 128 bits UTF-8 encoded = 16 chars * 8 bits each, if only ASCII chars are used
-dbEncryptionKey: $DB_ENCRYPTION_KEY
+dbEncryptionKey: ${DB_ENCRYPTION_KEY}
 
 twitterEndpoints:
   rootUri: https://api.twitter.com/1.1/
