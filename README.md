@@ -6,13 +6,15 @@ The service loads configuration from yaml file. The endpoint with exposed REST A
 
 Setup
 -------
-The project expects configuration (`config.yml`) containing an Application Token and Secret for making authenticated requests against Twitter's REST API and sqlite database (`sandbox.db`) containing credentials for a Twitter account that can be used to access their API.
+The project expects configuration (`config.yml`) and sqlite database (`sandbox.db`) on the classpath. The config defines Application Token and Secret for making authenticated requests against Twitter's REST API. The database contains encrypted credentials for a Twitter account that can be used to access their API. Application token, secret and encryption key can be specified directly in the config or in the environment variables. 
 
 * Install java 8
 * `brew install maven`
-* Define application token and secret for Twitter API in the environment variables \
+* Define application token and secret for Twitter API: \
     `export TWITTER_CONSUMER_KEY=******` \
-  `export TWITTER_CONSUMER_SECRET=******`
+    `export TWITTER_CONSUMER_SECRET=******`
+* Define database encryption key \
+    `export DB_ENCRYPTION_KEY=******`
 * (optional) `export SNYK_API_TOKEN="*********-****-****-****-****"` \
     register and get your API token from [Snyk website](https://snyk.io/). It will be presented in your [Snyk account page](https://snyk.io/account/). \
     If not given, maven error will be reported but won't fail the build.
