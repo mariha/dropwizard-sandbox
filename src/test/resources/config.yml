@@ -1,7 +1,7 @@
 twitterConsumerKey: "the-app-twitter-key"
 twitterConsumerSecret: "the-app-twitter-secret-like-0sdqFTL3k58JhRj"
 
-functionalUserId: 123
+functionalUserId: 101
 dbEncryptionKey: "-16-ASCII-chars-"
 
 twitterEndpoints:
